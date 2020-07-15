@@ -21,8 +21,11 @@ public class GameController {
     private GameMap gameMap;
 
     public static void main(String[] args) {
-        logger.info("这是GameController发送的info日志消息");
-        logger.warn("这是GameController发送的warn日志消息");
-        logger.error("这是GameController发送的error日志消息 {}", new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
+//        logger.info("这是GameController发送的info日志消息");
+//        logger.warn("这是GameController发送的warn日志消息");
+//        logger.error("这是GameController发送的error日志消息 {}", new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
+        GameController gameController = new GameController();
+        gameController.gameMap = new GameMap();
+        gameController.gameMap.viewMapNodeConnection();
     }
 }

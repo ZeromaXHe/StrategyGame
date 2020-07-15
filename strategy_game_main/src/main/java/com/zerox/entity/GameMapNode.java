@@ -59,4 +59,12 @@ public class GameMapNode {
     public void setConqueror(Player conqueror) {
         this.conqueror = conqueror;
     }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
 }
