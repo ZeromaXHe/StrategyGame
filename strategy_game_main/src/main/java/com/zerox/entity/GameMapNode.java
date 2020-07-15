@@ -15,6 +15,14 @@ public class GameMapNode {
      */
     private int id;
     /**
+     * 节点名字
+     */
+    private String name;
+    /**
+     * 节点人口
+     */
+    private int population;
+    /**
      * 连接该节点的节点队列
      */
     private List<GameMapNode> connectNodeList = new LinkedList<GameMapNode>();
@@ -25,6 +33,8 @@ public class GameMapNode {
 
     public GameMapNode(int id) {
         this.id = id;
+        this.name = "node" + id;
+        this.population = 0;
     }
 
     /**
@@ -66,5 +76,21 @@ public class GameMapNode {
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public int getPopulation() {
+        return population;
+    }
+
+    public void setPopulation(int population) {
+        this.population = population;
     }
 }

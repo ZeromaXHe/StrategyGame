@@ -3,9 +3,7 @@ package com.zerox.entity;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.Arrays;
-import java.util.LinkedList;
-import java.util.stream.IntStream;
+import java.util.function.Function;
 
 /**
  * 游戏地图
@@ -59,37 +57,33 @@ public class GameMap {
     /**
      * 在日志中记录GameMap中节点id的分布情况
      */
-    public void viewMapNodes() {
-        logger.debug("进入viewMapNodeConnection方法");
+    public void viewIdOfMapNodes() {
+        Function<GameMapNode, Integer> func1 = GameMapNode::getId;
+        Function<GameMapNode, String> func2 = func1.andThen(String::valueOf);
+        viewMapNodes(4, func2);
+    }
+
+    /**
+     * 在日志中记录GameMap中节点对应数据的分布情况
+     *
+     * @param stringCellLen 日志每格的长度
+     * @param function      需要查询GameMapNode节点对应数据的getter
+     */
+    public void viewMapNodes(int stringCellLen, Function<GameMapNode, String> function) {
+        logger.debug("进入viewMapNodes方法");
+        String formatter = "%" + stringCellLen + "s";
+        //logger.debug("formatter: {}", formatter);
         StringBuilder sb = new StringBuilder();
-        for(int i=0;i<yCount;i++){
-            for(int j=0; j<xCount;j++){
-                sb.append(String.format("%4d", mapNodes[j][i].getId()));
+        for (int i = 0; i < yCount; i++) {
+            for (int j = 0; j < xCount; j++) {
+                //logger.debug("function.apply(mapNodes[j][i])):{}", function.apply(mapNodes[j][i]));
+                sb.append(String.format(formatter, function.apply(mapNodes[j][i])));
             }
             logger.info(sb.toString());
             // 也可以 sb.setLength(0);
             sb.delete(0, sb.length());
         }
-        //此处不适合foreach 因为二维数组arr[x][y]先变成 arr[x]的foreach，然后再打印，就变成y行x列的记录
-//        for (GameMapNode[] gameMapNodes : mapNodes) {
-//            for (GameMapNode node : gameMapNodes) {
-//                sb.append(String.format("%4d", node.getId()));
-//            }
-//            logger.info(sb.toString());
-//            // 也可以 sb.setLength(0);
-//            sb.delete(0, sb.length());
-//        }
-        //此处也不适合使用stream流，因为二维数组arr[x][y]先变成 arr[x]的流，然后再打印，就变成y行x列的记录
-//        Arrays.stream(mapNodes).forEach(arrayLine -> {
-//            Arrays.stream(arrayLine)
-//                    .forEach(x -> {
-//                        sb.append(String.format("%4d", x.getId()));
-//                    });
-//            logger.info(sb.toString());
-//            // 也可以 sb.setLength(0);
-//            sb.delete(0, sb.length());
-//        });
-        logger.debug("结束viewMapNodeConnection方法");
+        logger.debug("结束viewMapNodes方法");
     }
 
     /**

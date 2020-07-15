@@ -1,6 +1,7 @@
 package com.zerox.controller;
 
 import com.zerox.entity.GameMap;
+import com.zerox.entity.GameMapNode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -25,9 +26,10 @@ public class GameController {
             logger.debug("进入main方法");
             GameController gameController = new GameController();
             gameController.gameMap = new GameMap();
-            gameController.gameMap.viewMapNodes();
+            gameController.gameMap.viewIdOfMapNodes();
+            gameController.gameMap.viewMapNodes(7, GameMapNode::getName);
             logger.debug("结束main方法");
-        } catch (Exception e){
+        } catch (Exception e) {
             // 异常日志打印不需要大括号{}
             logger.error("catched Exception:", e);
         }
