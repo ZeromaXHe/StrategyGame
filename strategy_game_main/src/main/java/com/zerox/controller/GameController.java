@@ -4,9 +4,6 @@ import com.zerox.entity.GameMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
-
 /**
  * 游戏控制器
  *
@@ -24,8 +21,15 @@ public class GameController {
 //        logger.info("这是GameController发送的info日志消息");
 //        logger.warn("这是GameController发送的warn日志消息");
 //        logger.error("这是GameController发送的error日志消息 {}", new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
-        GameController gameController = new GameController();
-        gameController.gameMap = new GameMap();
-        gameController.gameMap.viewMapNodeConnection();
+        try {
+            logger.debug("进入main方法");
+            GameController gameController = new GameController();
+            gameController.gameMap = new GameMap();
+            gameController.gameMap.viewMapNodes();
+            logger.debug("结束main方法");
+        } catch (Exception e){
+            // 异常日志打印不需要大括号{}
+            logger.error("catched Exception:", e);
+        }
     }
 }

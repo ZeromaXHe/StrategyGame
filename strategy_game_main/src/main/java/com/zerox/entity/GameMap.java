@@ -5,7 +5,6 @@ import org.slf4j.LoggerFactory;
 
 import java.util.Arrays;
 import java.util.LinkedList;
-import java.util.List;
 import java.util.stream.IntStream;
 
 /**
@@ -17,14 +16,23 @@ import java.util.stream.IntStream;
 public class GameMap {
 
     private static final Logger logger = LoggerFactory.getLogger(GameMap.class);
+
+    /**
+     * 游戏地图横轴节点数量
+     */
+    private int xCount = 10;
+    /**
+     * 游戏地图纵轴节点数量
+     */
+    private int yCount = 5;
     /**
      * 游戏地图节点数量
      */
     private int mapNodeCount = 0;
     /**
-     * 存储所有地图中节点的队列
+     * 存储所有地图中节点的二维数组
      */
-    private List<GameMapNode> mapNodeList = new LinkedList<GameMapNode>();
+    private GameMapNode[][] mapNodes = new GameMapNode[xCount][yCount];
 
     public GameMap() {
         initMap();
@@ -34,40 +42,54 @@ public class GameMap {
      * 初始化地图
      */
     private void initMap() {
-        GameMapNode node1 = newGameMapNode();
-        GameMapNode node2 = newGameMapNode();
-        GameMapNode node3 = newGameMapNode();
-        node1.connect(node2);
-        node2.connect(node3);
+        for (int i = 0; i < xCount; i++) {
+            for (int j = 0; j < yCount; j++) {
+                GameMapNode node = newGameMapNode();
+                mapNodes[i][j] = node;
+                if (i > 0) {
+                    node.connect(mapNodes[i - 1][j]);
+                }
+                if (j > 0) {
+                    node.connect(mapNodes[i][j - 1]);
+                }
+            }
+        }
     }
 
     /**
-     * 在日志中记录GameMap的连接情况
+     * 在日志中记录GameMap中节点id的分布情况
      */
-    public void viewMapNodeConnection() {
+    public void viewMapNodes() {
         logger.debug("进入viewMapNodeConnection方法");
-        boolean[][] mapNodeConnection = new boolean[mapNodeList.size()][mapNodeList.size()];
-        mapNodeList.forEach(node -> {
-            node.getConnectNodeList().forEach(node2 -> {
-                mapNodeConnection[node.getId()][node2.getId()] = true;
-            });
-        });
         StringBuilder sb = new StringBuilder();
-        Arrays.stream(mapNodeConnection).forEach(arrayLine -> {
-            // boolean[] 无法使用Arrays.stream。只能采用下面方式
-            IntStream.range(0, arrayLine.length)
-                    .mapToObj(idx -> arrayLine[idx])
-                    .forEach(x -> {
-                        if (x) {
-                            sb.append("1 ");
-                        } else {
-                            sb.append("0 ");
-                        }
-                    });
+        for(int i=0;i<yCount;i++){
+            for(int j=0; j<xCount;j++){
+                sb.append(String.format("%4d", mapNodes[j][i].getId()));
+            }
             logger.info(sb.toString());
             // 也可以 sb.setLength(0);
             sb.delete(0, sb.length());
-        });
+        }
+        //此处不适合foreach 因为二维数组arr[x][y]先变成 arr[x]的foreach，然后再打印，就变成y行x列的记录
+//        for (GameMapNode[] gameMapNodes : mapNodes) {
+//            for (GameMapNode node : gameMapNodes) {
+//                sb.append(String.format("%4d", node.getId()));
+//            }
+//            logger.info(sb.toString());
+//            // 也可以 sb.setLength(0);
+//            sb.delete(0, sb.length());
+//        }
+        //此处也不适合使用stream流，因为二维数组arr[x][y]先变成 arr[x]的流，然后再打印，就变成y行x列的记录
+//        Arrays.stream(mapNodes).forEach(arrayLine -> {
+//            Arrays.stream(arrayLine)
+//                    .forEach(x -> {
+//                        sb.append(String.format("%4d", x.getId()));
+//                    });
+//            logger.info(sb.toString());
+//            // 也可以 sb.setLength(0);
+//            sb.delete(0, sb.length());
+//        });
+        logger.debug("结束viewMapNodeConnection方法");
     }
 
     /**
@@ -77,7 +99,6 @@ public class GameMap {
      */
     private GameMapNode newGameMapNode() {
         GameMapNode node = new GameMapNode(mapNodeCount++);
-        mapNodeList.add(node);
         return node;
     }
 }
