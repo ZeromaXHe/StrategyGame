@@ -19,21 +19,15 @@ import javax.annotation.PostConstruct;
 @Component("JavaFxApplication")
 public class JavaFxApplication extends Application {
 
-    /**
-     * 因为Application的launch方法是静态的，只能用这种方式才能调用，直接使用testController会空指针
-     */
-    private static TestController staticTestController;
-
-    private TestController testController;
+    private static TestController testController;
 
     @Autowired
     public void setTestController(TestController testController) {
-        this.testController = testController;
+        JavaFxApplication.testController = testController;
     }
 
     @PostConstruct
     public void initMethod() {
-        staticTestController = testController;
         launch();
     }
 
@@ -41,7 +35,7 @@ public class JavaFxApplication extends Application {
     public void start(Stage primaryStage) throws Exception {
         AnchorPane an = new AnchorPane();
 
-        Button button = new Button(staticTestController.test());
+        Button button = new Button(testController.test());
         an.getChildren().add(button);
 
         Scene scene = new Scene(an);
