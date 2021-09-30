@@ -1,7 +1,7 @@
-package com.zerox.controller;
+package controller;
 
-import com.zerox.entity.GameMap;
-import com.zerox.entity.GameMapNode;
+import entity.GameMap;
+import entity.GameMapNode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

@@ -1,4 +1,4 @@
-package com.zerox.entity;
+package entity;
 
 import java.util.LinkedList;
 import java.util.List;

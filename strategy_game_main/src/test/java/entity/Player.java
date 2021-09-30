@@ -1,4 +1,4 @@
-package com.zerox.entity;
+package entity;
 
 /**
  * 游戏玩家
