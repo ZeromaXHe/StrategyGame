@@ -55,7 +55,20 @@ public class JavaFxApplication extends Application {
     @Override
     public void stop() throws Exception {
         super.stop();
-        springContext.stop();
+        SpringApplication.exit(springContext);
+        // SpringApplication.exit()底层调用链：
+        // SpringApplication.exit() -> close()
+        // -> AbstractApplicationContext.close() -> doClose()
+        // -> DefaultLifecycleProcessor.onClose() -> stopBeans()
+        // -> DefaultLifecycleProcessor.LifecycleGroup.stop()
+        // -> DefaultLifecycleProcessor.doStop() -> stop()
+        //
+        // springContext.stop(); 对应的实现类调用链其实就是:
+        // ConfigurableApplicationContext.stop() -> AbstractApplicationContext.stop() -> DefaultLifecycleProcessor.stop()
+        //
+        // 感觉还是用 SpringApplication.exit() 完善一点
+        // 但 springContext.stop() 的日志里会多一行 Tomcat 停止的记录：Stopping service [Tomcat]
+//        springContext.stop();
         logger.info("JavaFxApplication stopped!");
     }
 }
