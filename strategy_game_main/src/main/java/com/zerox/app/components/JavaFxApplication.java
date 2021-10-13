@@ -5,10 +5,9 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
-import org.springframework.beans.BeansException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.ApplicationContextAware;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
@@ -20,9 +19,8 @@ import javax.annotation.PostConstruct;
  * @ModifiedBy: zhuxi
  */
 @Component("JavaFxApplication")
-public class JavaFxApplication extends Application implements ApplicationContextAware {
-
-    private static ApplicationContext context;
+public class JavaFxApplication extends Application {
+    private static final Logger logger = LoggerFactory.getLogger(JavaFxApplication.class);
 
     private static TestController testController;
 
@@ -40,7 +38,8 @@ public class JavaFxApplication extends Application implements ApplicationContext
     public void start(Stage primaryStage) throws Exception {
         AnchorPane an = new AnchorPane();
 
-        Button button = new Button(testController.test());
+//        Button button = new Button(testController.test());
+        Button button = new Button("testController.test()");
         an.getChildren().add(button);
 
         Scene scene = new Scene(an);
@@ -49,19 +48,17 @@ public class JavaFxApplication extends Application implements ApplicationContext
         primaryStage.setWidth(800);
         primaryStage.setHeight(800);
         primaryStage.show();
+        logger.info("JavaFxApplication started!");
     }
 
+    /**
+     * 经测试，JavaFxApplication 执行 stop() 方法后，Spring Boot 的 Tomcat服务器才会启动并开放端口供web调用
+     *
+     * @throws Exception
+     */
     @Override
     public void stop() throws Exception {
         super.stop();
-        /// 停止 Spring Boot 代码在这里没有效果
-//        System.out.println("stop");
-//        int exitCode = SpringApplication.exit(context, () -> 0);
-//        System.exit(exitCode);
-    }
-
-    @Override
-    public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
-        JavaFxApplication.context = applicationContext;
+        logger.info("JavaFxApplication stopped!");
     }
 }
