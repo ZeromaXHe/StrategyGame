@@ -1,5 +1,6 @@
-package com.zerox.app.components;
+package com.zerox.app;
 
+import com.zerox.app.components.TestController;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -7,10 +8,9 @@ import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-
-import javax.annotation.PostConstruct;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.ConfigurableApplicationContext;
 
 /**
  * @Author: zhuxi
@@ -18,28 +18,29 @@ import javax.annotation.PostConstruct;
  * @Description:
  * @ModifiedBy: zhuxi
  */
-@Component("JavaFxApplication")
+@SpringBootApplication
 public class JavaFxApplication extends Application {
     private static final Logger logger = LoggerFactory.getLogger(JavaFxApplication.class);
 
+    private ConfigurableApplicationContext springContext;
+
     private static TestController testController;
 
-    @Autowired
-    public void setTestController(TestController testController) {
-        JavaFxApplication.testController = testController;
+    public static void main(String[] args) {
+        launch(JavaFxApplication.class, args);
     }
 
-    @PostConstruct
-    public void initMethod() {
-        launch();
+    @Override
+    public void init() throws Exception {
+        springContext = SpringApplication.run(JavaFxApplication.class);
+        testController = springContext.getBean(TestController.class);
     }
 
     @Override
     public void start(Stage primaryStage) throws Exception {
         AnchorPane an = new AnchorPane();
 
-//        Button button = new Button(testController.test());
-        Button button = new Button("testController.test()");
+        Button button = new Button(testController.test());
         an.getChildren().add(button);
 
         Scene scene = new Scene(an);
@@ -51,14 +52,10 @@ public class JavaFxApplication extends Application {
         logger.info("JavaFxApplication started!");
     }
 
-    /**
-     * 经测试，JavaFxApplication 执行 stop() 方法后，Spring Boot 的 Tomcat服务器才会启动并开放端口供web调用
-     *
-     * @throws Exception
-     */
     @Override
     public void stop() throws Exception {
         super.stop();
+        springContext.stop();
         logger.info("JavaFxApplication stopped!");
     }
 }
