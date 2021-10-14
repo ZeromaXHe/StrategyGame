@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component;
 @Component("TestService")
 public class TestService {
     public String test() {
-//        throw new RuntimeException("一个异常");
-        return "test";
+        throw new RuntimeException("一个异常");
+//        return "test";
     }
 }
