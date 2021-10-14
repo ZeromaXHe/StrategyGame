@@ -1,4 +1,4 @@
-package com.zerox.app.entity;
+package com.zerox.entity;
 
 /**
  * @Author: zhuxi

@@ -1,6 +1,6 @@
-package com.zerox.app;
+package com.zerox;
 
-import com.zerox.app.components.TestController;
+import com.zerox.controller.MainController;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -26,7 +26,7 @@ public class JavaFxApplication extends Application {
 
     private ConfigurableApplicationContext springContext;
 
-    private static TestController testController;
+    private static MainController mainController;
 
     public static void main(String[] args) {
         launch(JavaFxApplication.class, args);
@@ -35,14 +35,14 @@ public class JavaFxApplication extends Application {
     @Override
     public void init() throws Exception {
         springContext = SpringApplication.run(JavaFxApplication.class);
-        testController = springContext.getBean(TestController.class);
+        mainController = springContext.getBean(MainController.class);
     }
 
     @Override
     public void start(Stage primaryStage) throws Exception {
         AnchorPane an = new AnchorPane();
 
-        Button button = new Button(testController.test().getBody());
+        Button button = new Button(mainController.getButtonName().getBody());
         an.getChildren().add(button);
 
         Scene scene = new Scene(an);

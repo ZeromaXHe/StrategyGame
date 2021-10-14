@@ -1,7 +1,8 @@
-package com.zerox.app.components;
+package com.zerox.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.zerox.util.JacksonUtil;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -13,18 +14,12 @@ import org.springframework.boot.test.context.SpringBootTest;
  * @ModifiedBy: zhuxi
  */
 @SpringBootTest
-public class TestControllerTest {
+public class MainControllerTest {
     @Autowired
-    private TestController testController;
-
-    private ObjectMapper objectMapper = new ObjectMapper();
+    private MainController mainController;
 
     @Test
     public void testTest() {
-        try {
-            System.out.println(objectMapper.writeValueAsString(testController.test()));
-        } catch (JsonProcessingException e) {
-            e.printStackTrace();
-        }
+        System.out.println(JacksonUtil.toJson(mainController.getButtonName()));
     }
 }

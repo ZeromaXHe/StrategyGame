@@ -1,5 +1,6 @@
-package com.zerox.app.components;
+package com.zerox.service.impl;
 
+import com.zerox.service.MainService;
 import org.springframework.stereotype.Component;
 
 /**
@@ -8,9 +9,10 @@ import org.springframework.stereotype.Component;
  * @Description:
  * @ModifiedBy: zhuxi
  */
-@Component("TestService")
-public class TestService {
-    public String test() {
+@Component("MainServiceImpl")
+public class MainServiceImpl implements MainService {
+    @Override
+    public String getButtonName() {
         throw new RuntimeException("一个异常");
 //        return "test";
     }

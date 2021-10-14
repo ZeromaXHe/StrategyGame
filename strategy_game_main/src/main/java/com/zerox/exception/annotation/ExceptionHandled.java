@@ -1,4 +1,4 @@
-package com.zerox.app.exception.annotation;
+package com.zerox.exception.annotation;
 
 import java.lang.annotation.Documented;
 import java.lang.annotation.ElementType;
