@@ -1,5 +1,7 @@
 package com.zerox.app.components;
 
+import com.zerox.app.entity.Result;
+import com.zerox.app.exception.annotation.ExceptionHandled;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -19,8 +21,9 @@ public class TestController {
         this.testService = testService;
     }
 
+    @ExceptionHandled
     @RequestMapping("/test")
-    public String test() {
-        return testService.test();
+    public Result<String> test() {
+        return new Result<>(testService.test());
     }
 }

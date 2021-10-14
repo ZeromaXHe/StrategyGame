@@ -1,5 +1,6 @@
 package com.zerox.app.exception.handler;
 
+import com.zerox.app.entity.Result;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
@@ -23,7 +24,9 @@ public class GlobalExceptionHandler {
 
     /// 针对 TestController 类下所有方法
 //    @Pointcut("within(com.zerox.app.components.TestController)")
-    @Pointcut("execution(String com.zerox.app.components.TestController.test())")
+    /// 专门指定 TestController.test() 方法
+//    @Pointcut("execution(com.zerox.app.entity.Result<String> com.zerox.app.components.TestController.test())")
+    @Pointcut("@annotation(com.zerox.app.exception.annotation.ExceptionHandled))")
     public void testControllerTestMethod() {
     }
 
@@ -33,15 +36,15 @@ public class GlobalExceptionHandler {
      * @return
      */
     @Around(value = "testControllerTestMethod()")
-    public String exceptionHandler(ProceedingJoinPoint jp) {
+    public Object exceptionHandler(ProceedingJoinPoint jp) {
         try {
-            return (String) jp.proceed();
+            return jp.proceed();
         } catch (Exception e) {
             logger.error("异常！原因是:{}", e.getMessage());
-            return "异常！";
+            return new Result(e);
         } catch (Throwable throwable) {
             logger.error("抛出！原因是:{}", throwable.getMessage());
-            return "抛出！";
+            return new Result(throwable);
         }
     }
 }

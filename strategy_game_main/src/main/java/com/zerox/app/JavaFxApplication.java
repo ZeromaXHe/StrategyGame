@@ -42,7 +42,7 @@ public class JavaFxApplication extends Application {
     public void start(Stage primaryStage) throws Exception {
         AnchorPane an = new AnchorPane();
 
-        Button button = new Button(testController.test());
+        Button button = new Button(testController.test().getBody());
         an.getChildren().add(button);
 
         Scene scene = new Scene(an);
