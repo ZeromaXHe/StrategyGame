@@ -11,15 +11,18 @@ public class Result<T> {
     private String msg;
     private T body;
 
+    private Result(ResultCode resultCode) {
+        this.code = resultCode.getCode();
+        this.msg = resultCode.getMsg();
+    }
+
     public Result(T body) {
-        this.code = 0;
-        this.msg = "成功";
+        this(ResultCode.SUCCESS);
         this.body = body;
     }
 
     public Result(Throwable t) {
-        this.code = -1;
-        this.msg = "异常抛出";
+        this(ResultCode.ERROR);
         this.body = null;
     }
 

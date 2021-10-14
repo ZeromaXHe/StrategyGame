@@ -22,20 +22,12 @@ import org.springframework.stereotype.Component;
 public class GlobalExceptionHandler {
     private static final Logger logger = LoggerFactory.getLogger(GlobalExceptionHandler.class);
 
-    /// 针对 TestController 类下所有方法
-//    @Pointcut("within(com.zerox.app.components.TestController)")
-    /// 专门指定 TestController.test() 方法
-//    @Pointcut("execution(com.zerox.app.entity.Result<String> com.zerox.app.components.TestController.test())")
-    @Pointcut("@annotation(com.zerox.app.exception.annotation.ExceptionHandled))")
-    public void testControllerTestMethod() {
-    }
-
     /**
      * 处理异常
      *
      * @return
      */
-    @Around(value = "testControllerTestMethod()")
+    @Around(value = "@annotation(com.zerox.app.exception.annotation.ExceptionHandled))")
     public Object exceptionHandler(ProceedingJoinPoint jp) {
         try {
             return jp.proceed();
