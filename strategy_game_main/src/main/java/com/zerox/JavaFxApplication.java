@@ -2,9 +2,9 @@ package com.zerox;
 
 import com.zerox.controller.MainController;
 import javafx.application.Application;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -12,6 +12,8 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.EnableAspectJAutoProxy;
+
+import java.net.URL;
 
 /**
  * @Author: zhuxi
@@ -28,6 +30,10 @@ public class JavaFxApplication extends Application {
 
     private static MainController mainController;
 
+    public static MainController getMainController() {
+        return mainController;
+    }
+
     public static void main(String[] args) {
         launch(JavaFxApplication.class, args);
     }
@@ -36,20 +42,18 @@ public class JavaFxApplication extends Application {
     public void init() throws Exception {
         springContext = SpringApplication.run(JavaFxApplication.class);
         mainController = springContext.getBean(MainController.class);
+        logger.info("JavaFxApplication inited!");
     }
 
     @Override
     public void start(Stage primaryStage) throws Exception {
-        AnchorPane an = new AnchorPane();
-
-        Button button = new Button(mainController.getButtonName().getBody());
-        an.getChildren().add(button);
-
-        Scene scene = new Scene(an);
-        primaryStage.setScene(scene);
-        primaryStage.setTitle("Java fx");
-        primaryStage.setWidth(800);
-        primaryStage.setHeight(800);
+        // path 不以’/'开头时，默认是从此类所在的包下取资源；
+        // path 以’/'开头时，则是从 ClassPath 根下获取
+//        URL resource = getClass().getResource("/com/zerox/fxml/mainView.fxml");
+        URL resource = getClass().getResource("fxml/mainView.fxml");
+        Parent root = FXMLLoader.load(resource);
+        primaryStage.setTitle("javaFX MVC test");
+        primaryStage.setScene(new Scene(root));
         primaryStage.show();
         logger.info("JavaFxApplication started!");
     }

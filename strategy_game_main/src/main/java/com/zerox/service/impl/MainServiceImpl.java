@@ -13,7 +13,7 @@ import org.springframework.stereotype.Component;
 public class MainServiceImpl implements MainService {
     @Override
     public String getButtonName() {
-        throw new RuntimeException("一个异常");
-//        return "test";
+//        throw new RuntimeException("一个异常");
+        return "test";
     }
 }
