@@ -26,11 +26,7 @@ import java.net.URL;
 public class JavaFxApplication extends Application {
     private static final Logger logger = LoggerFactory.getLogger(JavaFxApplication.class);
 
-    private static ConfigurableApplicationContext springContext;
-
-    public static ConfigurableApplicationContext getSpringContext() {
-        return springContext;
-    }
+    private ConfigurableApplicationContext springContext;
 
     public static void main(String[] args) {
         launch(JavaFxApplication.class, args);
@@ -48,7 +44,9 @@ public class JavaFxApplication extends Application {
         // path 以’/'开头时，则是从 ClassPath 根下获取
 //        URL resource = getClass().getResource("/com/zerox/fxml/mainView.fxml");
         URL resource = getClass().getResource("fxml/mainView.fxml");
-        Parent root = FXMLLoader.load(resource);
+        FXMLLoader loader = new FXMLLoader(resource);
+        loader.setControllerFactory(springContext::getBean);
+        Parent root = loader.load();
         primaryStage.setTitle("javaFX MVC test");
         primaryStage.setScene(new Scene(root));
         primaryStage.show();

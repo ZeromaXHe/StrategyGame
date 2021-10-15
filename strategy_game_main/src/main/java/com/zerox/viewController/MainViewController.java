@@ -1,6 +1,5 @@
 package com.zerox.viewController;
 
-import com.zerox.JavaFxApplication;
 import com.zerox.controller.MainController;
 import com.zerox.entity.Result;
 import com.zerox.model.FinancialAccount;
@@ -9,17 +8,26 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TextFormatter;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
 
 /**
  * @Author: zhuxi
  * @Time: 2021/10/15 15:58
- * @Description: mvc体系下的Controller，和Spring三层体系下的Controller区分开来
+ * @Description: mvc体系下的ViewController，和Spring三层体系下的后端Controller区分开来
  * 参考：https://edencoding.com/mvc-in-javafx/
  * @ModifiedBy: zhuxi
  */
+@Controller("MainViewController")
 public class MainViewController {
-    //Spring Controller
-    private MainController mainController = JavaFxApplication.getSpringContext().getBean(MainController.class);
+    // Back-end Controller
+    private MainController mainController;
+
+    @Autowired
+    public void setMainController(MainController mainController) {
+        this.mainController = mainController;
+    }
+
     //Model
     private FinancialAccount account;
     //View nodes
