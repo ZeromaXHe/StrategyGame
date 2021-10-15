@@ -26,12 +26,10 @@ import java.net.URL;
 public class JavaFxApplication extends Application {
     private static final Logger logger = LoggerFactory.getLogger(JavaFxApplication.class);
 
-    private ConfigurableApplicationContext springContext;
+    private static ConfigurableApplicationContext springContext;
 
-    private static MainController mainController;
-
-    public static MainController getMainController() {
-        return mainController;
+    public static ConfigurableApplicationContext getSpringContext() {
+        return springContext;
     }
 
     public static void main(String[] args) {
@@ -41,7 +39,6 @@ public class JavaFxApplication extends Application {
     @Override
     public void init() throws Exception {
         springContext = SpringApplication.run(JavaFxApplication.class);
-        mainController = springContext.getBean(MainController.class);
         logger.info("JavaFxApplication inited!");
     }
 

@@ -1,7 +1,5 @@
 package com.zerox.controller;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.zerox.util.JacksonUtil;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +18,6 @@ public class MainControllerTest {
 
     @Test
     public void testTest() {
-        System.out.println(JacksonUtil.toJson(mainController.getButtonName()));
+        System.out.println(JacksonUtil.toJson(mainController.getAccountHolderName()));
     }
 }

@@ -7,5 +7,5 @@ package com.zerox.service;
  * @ModifiedBy: zhuxi
  */
 public interface MainService {
-    String getButtonName();
+    String getAccountHolderName();
 }

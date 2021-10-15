@@ -2,6 +2,7 @@ package com.zerox.viewController;
 
 import com.zerox.JavaFxApplication;
 import com.zerox.controller.MainController;
+import com.zerox.entity.Result;
 import com.zerox.model.FinancialAccount;
 import javafx.event.Event;
 import javafx.fxml.FXML;
@@ -18,7 +19,7 @@ import javafx.scene.control.TextFormatter;
  */
 public class MainViewController {
     //Spring Controller
-    private MainController mainController = JavaFxApplication.getMainController();
+    private MainController mainController = JavaFxApplication.getSpringContext().getBean(MainController.class);
     //Model
     private FinancialAccount account;
     //View nodes
@@ -32,9 +33,10 @@ public class MainViewController {
     private TextField amountTextField;
 
     public void initialize() {
-        //get model
-        String body = mainController.getButtonName().getBody();
+        Result<String> result = mainController.getAccountHolderName();
+        String body = result.getBody();
         String accountHolderName = body == null ? "unknown" : body;
+        //get model
         account = new FinancialAccount(accountHolderName, 6626, 1000d);
         //link Model with View
         accountHolder.textProperty().bind(account.accountHolderProperty());

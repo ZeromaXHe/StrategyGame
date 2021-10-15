@@ -22,7 +22,7 @@ public class MainController {
     }
 
     @ExceptionHandled
-    public Result<String> getButtonName() {
-        return new Result<>(testService.getButtonName());
+    public Result<String> getAccountHolderName() {
+        return new Result<>(testService.getAccountHolderName());
     }
 }
