@@ -1,15 +1,30 @@
 package com.zerox.viewController;
 
 import com.zerox.controller.MainController;
+import com.zerox.engine.Entity;
+import com.zerox.engine.GameLoopTimer;
+import com.zerox.engine.KeyPolling;
+import com.zerox.engine.Renderer;
 import com.zerox.entity.Result;
 import com.zerox.model.FinancialAccount;
 import javafx.event.Event;
 import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
+import javafx.scene.canvas.Canvas;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TextFormatter;
+import javafx.scene.image.Image;
+import javafx.scene.image.PixelWriter;
+import javafx.scene.image.WritableImage;
+import javafx.scene.input.KeyCode;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.paint.Color;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+
+import java.net.URL;
+import java.util.ResourceBundle;
 
 /**
  * @Author: zhuxi
@@ -19,7 +34,7 @@ import org.springframework.stereotype.Controller;
  * @ModifiedBy: zhuxi
  */
 @Controller("MainViewController")
-public class MainViewController {
+public class MainViewController implements Initializable {
     // Back-end Controller
     private MainController mainController;
 
@@ -28,57 +43,82 @@ public class MainViewController {
         this.mainController = mainController;
     }
 
-    //Model
-    private FinancialAccount account;
-    //View nodes
-    @FXML
-    private Label accountHolder;
-    @FXML
-    private Label accountNumber;
-    @FXML
-    private Label accountBalance;
-    @FXML
-    private TextField amountTextField;
+    public Canvas gameCanvas;
+    public AnchorPane gameAnchor;
+    KeyPolling keys = KeyPolling.getInstance();
 
-    public void initialize() {
-        Result<String> result = mainController.getAccountHolderName();
-        String body = result.getBody();
-        String accountHolderName = body == null ? "unknown" : body;
-        //get model
-        account = new FinancialAccount(accountHolderName, 6626, 1000d);
-        //link Model with View
-        accountHolder.textProperty().bind(account.accountHolderProperty());
-        accountBalance.textProperty().bind(account.accountBalanceProperty().asString());
-        accountNumber.textProperty().bind(account.accountNumberProperty().asString());
-        //link Controller to View - ensure only numeric input (integers) in text field
-        amountTextField.setTextFormatter(new TextFormatter<>(change -> {
-            if (change.getText().matches("\\d+") || change.getText().equals("")) {
-                return change;
-            } else {
-                change.setText("");
-                change.setRange(
-                        change.getRangeStart(),
-                        change.getRangeStart()
-                );
-                return change;
+    private Entity player = new Entity(buildPlayer());
+
+    private Image buildPlayer() {
+        WritableImage wi = new WritableImage(100, 100);
+        PixelWriter pw = wi.getPixelWriter();
+
+        for (int i = 0; i < 100; i++) {
+            for (int j = 0; j < 100; j++) {
+                if (i > j && i < 100 - j) {
+                    pw.setColor(i, j, Color.valueOf("#FFD700"));
+                } else {
+                    pw.setColor(i, j, Color.valueOf("#FF0000"));
+                }
             }
-        }));
+        }
+        return wi;
     }
 
-    @FXML
-    private void handleDeposit(Event event) {
-        account.deposit(getAmount());
-        event.consume();
+    private Image buildBackground() {
+        WritableImage wi = new WritableImage(1000, 1000);
+        PixelWriter pw = wi.getPixelWriter();
+
+        for (int i = 0; i < 1000; i++) {
+            for (int j = 0; j < 1000; j++) {
+                pw.setColor(i, j, Color.valueOf("#111111"));
+            }
+        }
+        return wi;
     }
 
-    @FXML
-    private void handleWithdrawal(Event event) {
-        account.withdraw(getAmount());
-        event.consume();
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+
+        initialiseCanvas();
+
+        player.setDrawPosition(350, 200);
+        player.setScale(0.5f);
+
+        Renderer renderer = new Renderer(this.gameCanvas);
+        renderer.addEntity(player);
+        renderer.setBackground(buildBackground());
+
+        GameLoopTimer timer = new GameLoopTimer() {
+            @Override
+            public void tick(float secondsSinceLastFrame) {
+                renderer.prepare();
+
+                updatePlayerMovement(secondsSinceLastFrame);
+
+                renderer.render();
+            }
+        };
+        timer.start();
     }
 
-    private double getAmount() {
-        if (amountTextField.getText().equals("")) return 0;
-        return Double.parseDouble(amountTextField.getText());
+    private void initialiseCanvas() {
+        gameCanvas.widthProperty().bind(gameAnchor.widthProperty());
+        gameCanvas.heightProperty().bind(gameAnchor.heightProperty());
+    }
+
+    private void updatePlayerMovement(float frameDuration) {
+        if (keys.isDown(KeyCode.UP)) {
+            player.addThrust(20 * frameDuration);
+        } else if (keys.isDown(KeyCode.DOWN)) {
+            player.addThrust(-20 * frameDuration);
+        }
+
+        if (keys.isDown(KeyCode.RIGHT)) {
+            player.addTorque(120f * frameDuration);
+        } else if (keys.isDown(KeyCode.LEFT)) {
+            player.addTorque(-120f * frameDuration);
+        }
+        player.update();
     }
 }

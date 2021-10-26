@@ -1,6 +1,6 @@
 package com.zerox;
 
-import com.zerox.controller.MainController;
+import com.zerox.engine.KeyPolling;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -47,8 +47,12 @@ public class JavaFxApplication extends Application {
         FXMLLoader loader = new FXMLLoader(resource);
         loader.setControllerFactory(springContext::getBean);
         Parent root = loader.load();
-        primaryStage.setTitle("javaFX MVC test");
-        primaryStage.setScene(new Scene(root));
+
+        Scene scene = new Scene(root);
+        KeyPolling.getInstance().pollScene(scene);
+
+        primaryStage.setScene(scene);
+        primaryStage.setTitle("javaFX game");
         primaryStage.show();
         logger.info("JavaFxApplication started!");
     }
