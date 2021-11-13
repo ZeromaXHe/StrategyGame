@@ -10,9 +10,12 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.net.URL;
 import java.util.ResourceBundle;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @Author: zhuxi
@@ -21,6 +24,8 @@ import java.util.ResourceBundle;
  * @ModifiedBy: zhuxi
  */
 public class DemoTest extends Application implements Initializable {
+    private static final Logger logger = LoggerFactory.getLogger(DemoTest.class);
+
     private SimpleStringProperty text = new SimpleStringProperty("0");
     private SimpleStringProperty fps = new SimpleStringProperty("0.0");
     private GameLoopTimer timer = new GameLoopTimer() {
@@ -30,6 +35,11 @@ public class DemoTest extends Application implements Initializable {
             num++;
             text.set(String.valueOf(num));
             fps.set(String.valueOf(1 / secondsSinceLastFrame));
+            try {
+                TimeUnit.MILLISECONDS.sleep(100);
+            } catch (InterruptedException e) {
+                logger.error("sleep error: ", e);
+            }
         }
     };
 
@@ -49,7 +59,7 @@ public class DemoTest extends Application implements Initializable {
         FXMLLoader loader = new FXMLLoader(resource);
         Parent root = loader.load();
 
-        System.out.println("loader.load()");
+        logger.info("loader.load()");
 
         Scene scene = new Scene(root);
         primaryStage.setScene(scene);
@@ -67,25 +77,25 @@ public class DemoTest extends Application implements Initializable {
     @FXML
     public void start() {
         timer.start();
-        System.out.println("timer.start()");
+        logger.info("timer.start()");
     }
 
     @FXML
     public void pause() {
         timer.pause();
-        System.out.println("timer.pause()");
+        logger.info("timer.pause()");
     }
 
     @FXML
     public void play() {
         timer.play();
-        System.out.println("timer.play()");
+        logger.info("timer.play()");
     }
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         textField.textProperty().bind(text);
         fpsTextField.textProperty().bind(fps);
-        System.out.println("initialize()");
+        logger.info("initialize()");
     }
 }

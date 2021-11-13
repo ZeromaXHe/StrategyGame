@@ -1,18 +1,11 @@
 package com.zerox.viewController;
 
 import com.zerox.controller.MainController;
-import com.zerox.engine.Entity;
 import com.zerox.engine.GameLoopTimer;
-import com.zerox.engine.KeyPolling;
-import com.zerox.engine.Renderer;
+import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.canvas.Canvas;
-import javafx.scene.image.Image;
-import javafx.scene.image.PixelWriter;
-import javafx.scene.image.WritableImage;
-import javafx.scene.input.KeyCode;
+import javafx.scene.control.Button;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.paint.Color;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
@@ -36,82 +29,80 @@ public class MainViewController implements Initializable {
         this.mainController = mainController;
     }
 
-    public Canvas gameCanvas;
-    public AnchorPane gameAnchor;
-    KeyPolling keys = KeyPolling.getInstance();
-
-    private Entity player = new Entity(buildPlayer());
-
-    private Image buildPlayer() {
-        WritableImage wi = new WritableImage(100, 100);
-        PixelWriter pw = wi.getPixelWriter();
-
-        for (int i = 0; i < 100; i++) {
-            for (int j = 0; j < 100; j++) {
-                if (i > j && i < 100 - j) {
-                    pw.setColor(i, j, Color.valueOf("#FFD700"));
-                } else {
-                    pw.setColor(i, j, Color.valueOf("#FF0000"));
-                }
-            }
-        }
-        return wi;
-    }
-
-    private Image buildBackground() {
-        WritableImage wi = new WritableImage(1000, 1000);
-        PixelWriter pw = wi.getPixelWriter();
-
-        for (int i = 0; i < 1000; i++) {
-            for (int j = 0; j < 1000; j++) {
-                pw.setColor(i, j, Color.valueOf("#111111"));
-            }
-        }
-        return wi;
-    }
+    @FXML
+    private AnchorPane mainPane;
+    @FXML
+    private AnchorPane mapPane;
+    @FXML
+    private AnchorPane infoPane;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-
-        initialiseCanvas();
-
-        player.setDrawPosition(350, 200);
-        player.setScale(0.5f);
-
-        Renderer renderer = new Renderer(this.gameCanvas);
-        renderer.addEntity(player);
-        renderer.setBackground(buildBackground());
-
-        GameLoopTimer timer = new GameLoopTimer() {
-            @Override
-            public void tick(float secondsSinceLastFrame) {
-                renderer.prepare();
-
-                updatePlayerMovement(secondsSinceLastFrame);
-
-                renderer.render();
+        for (int i = 0; i < 30; i++) {
+            for (int j = 0; j < 30; j++) {
+                mainPane.getChildren().add(new MainPaneButton("", i, j, i, j));
             }
-        };
-        timer.start();
-    }
-
-    private void initialiseCanvas() {
-        gameCanvas.widthProperty().bind(gameAnchor.widthProperty());
-        gameCanvas.heightProperty().bind(gameAnchor.heightProperty());
-    }
-
-    private void updatePlayerMovement(float frameDuration) {
-        if (keys.isDown(KeyCode.UP)) {
-            player.addThrust(20 * frameDuration);
-        } else if (keys.isDown(KeyCode.DOWN)) {
-            player.addThrust(-20 * frameDuration);
         }
 
-        if (keys.isDown(KeyCode.RIGHT)) {
-            player.addTorque(120f * frameDuration);
-        } else if (keys.isDown(KeyCode.LEFT)) {
-            player.addTorque(-120f * frameDuration);
+//        GameLoopTimer timer = new GameLoopTimer() {
+//            @Override
+//            public void tick(float secondsSinceLastFrame) {
+//                mainController.getAccountHolderName();
+//            }
+//        };
+//        timer.start();
+    }
+
+    static class MainPaneButton extends Button {
+        private int x;
+        private int y;
+        private int mapX;
+        private int mapY;
+
+        public MainPaneButton(String text, int x, int y, int mapX, int mapY) {
+            super(text);
+            this.x = x;
+            this.y = y;
+            this.mapX = mapX;
+            this.mapY = mapY;
+            this.setPrefHeight(20);
+            this.setPrefWidth(20);
+            AnchorPane.setTopAnchor(this, 20.0 * x);
+            AnchorPane.setLeftAnchor(this, 20.0 * y);
+            this.setStyle("-fx-background-color: #009999;-fx-border-color: #FFFFFF;-fx-border-style: solid;-fx-border-width: 1;-fx-border-radius: 2;");
+
         }
-        player.update();
+
+        public int getX() {
+            return x;
+        }
+
+        public void setX(int x) {
+            this.x = x;
+        }
+
+        public int getY() {
+            return y;
+        }
+
+        public void setY(int y) {
+            this.y = y;
+        }
+
+        public int getMapX() {
+            return mapX;
+        }
+
+        public void setMapX(int mapX) {
+            this.mapX = mapX;
+        }
+
+        public int getMapY() {
+            return mapY;
+        }
+
+        public void setMapY(int mapY) {
+            this.mapY = mapY;
+        }
     }
 }

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.FlowPane?>
+<BorderPane fx:id="gameBorderPane" prefHeight="600" prefWidth="800" xmlns="http://javafx.com/javafx/10.0.2-internal"
+            style="-fx-background-color: #00EEEE"
+            xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.zerox.viewController.MainViewController">
+    <center>
+        <AnchorPane fx:id="mainPane" prefWidth="600" prefHeight="600"
+                    style="-fx-background-color: #DDDDDD;
+                    -fx-border-color: #AAAAAA;
+                    -fx-border-style: solid;
+                    -fx-border-width: 5;
+                    -fx-border-radius: 10;">
+        </AnchorPane>
+    </center>
+    <right>
+        <FlowPane prefWidth="150">
+            <AnchorPane fx:id="mapPane" prefWidth="200" prefHeight="200" style="-fx-background-color: #00CCCC">
+
+            </AnchorPane>
+            <AnchorPane fx:id="infoPane" prefWidth="200" prefHeight="400" style="-fx-background-color: #00CCFF">
+
+            </AnchorPane>
+        </FlowPane>
+    </right>
+</BorderPane>

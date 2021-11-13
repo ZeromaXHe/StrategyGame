@@ -42,8 +42,8 @@ public class JavaFxApplication extends Application {
     public void start(Stage primaryStage) throws Exception {
         // path 不以’/'开头时，默认是从此类所在的包下取资源；
         // path 以’/'开头时，则是从 ClassPath 根下获取
-//        URL resource = getClass().getResource("/com/zerox/fxml/mainView.fxml");
-        URL resource = getClass().getResource("fxml/mainView.fxml");
+//        URL resource = getClass().getResource("/com/zerox/fxml/strategyGameView.fxml");
+        URL resource = getClass().getResource("fxml/strategyGameView.fxml");
         FXMLLoader loader = new FXMLLoader(resource);
         loader.setControllerFactory(springContext::getBean);
         Parent root = loader.load();
