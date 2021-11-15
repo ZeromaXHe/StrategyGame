@@ -1,5 +1,6 @@
 package com.zerox.service;
 
+import com.zerox.game.model.MapTile;
 import javafx.scene.image.Image;
 
 /**
@@ -11,5 +12,7 @@ import javafx.scene.image.Image;
 public interface MiniMapService {
     Image getMiniMapImage();
 
-    Image getNewMiniMap(int x, int y);
+    Image getNewMiniMap(int x, int y, int width, int height);
+
+    MapTile[][] getMapViewTilesOnClick(int x, int y, int width, int height);
 }

@@ -1,11 +1,15 @@
 package com.zerox.service.impl;
 
 import com.zerox.constant.MainConstant;
+import com.zerox.dao.MapDao;
+import com.zerox.game.model.MapTile;
+import com.zerox.game.view.MainPaneButton;
 import com.zerox.service.MiniMapService;
 import javafx.scene.image.Image;
 import javafx.scene.image.PixelWriter;
 import javafx.scene.image.WritableImage;
 import javafx.scene.paint.Color;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 /**
@@ -19,6 +23,13 @@ public class MiniMapServiceImpl implements MiniMapService {
     // TODO: 目前常驻内存，后续可以使用懒汉式优化
     private WritableImage wi = new WritableImage(MainConstant.MINIMAP_X, MainConstant.MINIMAP_Y);
 
+    private MapDao mapDao;
+
+    @Autowired
+    public void setMapDao(MapDao mapDao) {
+        this.mapDao = mapDao;
+    }
+
     @Override
     public Image getMiniMapImage() {
         PixelWriter pw = wi.getPixelWriter();
@@ -28,18 +39,50 @@ public class MiniMapServiceImpl implements MiniMapService {
     }
 
     @Override
-    public Image getNewMiniMap(int x, int y) {
+    public Image getNewMiniMap(int x, int y, int width, int height) {
         PixelWriter pw = wi.getPixelWriter();
         paintBasicImage(pw);
-        paintViewBox(pw, x - MainConstant.MINIMAP_VIEW_X / 2 - 1, x + MainConstant.MINIMAP_VIEW_X / 2,
-                y - MainConstant.MINIMAP_VIEW_Y / 2 - 1, y + MainConstant.MINIMAP_VIEW_Y / 2);
+        int[] viewBoxStart = calcViewBoxStart(x, y, width, height);
+        paintViewBox(pw, viewBoxStart[0] - 1, viewBoxStart[0] + width,
+                viewBoxStart[1] - 1, viewBoxStart[1] + height);
         return wi;
     }
 
+    @Override
+    public MapTile[][] getMapViewTilesOnClick(int x, int y, int width, int height) {
+        int[] viewBoxStart = calcViewBoxStart(x, y, width, height);
+        return mapDao.getMapViewTiles(viewBoxStart[0], viewBoxStart[1], width, height);
+    }
+
+    private int[] calcViewBoxStart(int x, int y, int width, int height) {
+        int xMin = x - width / 2;
+        int xMax = x + width / 2;
+        int yMin = y - height / 2;
+        int yMax = y + height / 2;
+        if (xMax > MainConstant.MINIMAP_X) {
+            xMin -= MainConstant.MINIMAP_X - xMax;
+            xMax = MainConstant.MINIMAP_X;
+        }
+        if (yMax > MainConstant.MINIMAP_Y) {
+            yMin -= MainConstant.MINIMAP_Y - yMax;
+            yMax = MainConstant.MINIMAP_Y;
+        }
+        if (xMin < 0) {
+            xMax -= xMin;
+            xMin = 0;
+        }
+        if (yMin < 0) {
+            yMax -= yMin;
+            yMin = 0;
+        }
+        return new int[]{xMin, yMin};
+    }
+
     private void paintBasicImage(PixelWriter pw) {
+        MapTile[][] mapAllTiles = mapDao.getMapViewTiles(0, 0, MainConstant.MINIMAP_X, MainConstant.MINIMAP_Y);
         for (int i = 0; i < MainConstant.MINIMAP_X; i++) {
             for (int j = 0; j < MainConstant.MINIMAP_Y; j++) {
-                pw.setColor(i, j, Color.BLACK);
+                pw.setColor(i, j, MainPaneButton.getColorOfPlayer(mapAllTiles[i][j].getPlayer()));
             }
         }
     }

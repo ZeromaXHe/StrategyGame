@@ -2,6 +2,9 @@ package com.zerox.viewController;
 
 import com.zerox.constant.MainConstant;
 import com.zerox.controller.MainController;
+import com.zerox.game.model.MapTile;
+import com.zerox.game.view.MainPaneButton;
+import com.zerox.util.JacksonUtil;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
@@ -41,11 +44,28 @@ public class MainViewController implements Initializable {
     @FXML
     private AnchorPane infoPane;
 
+    private MainPaneButton[][] mainPaneButtons = new MainPaneButton[MainConstant.MINIMAP_VIEW_X][MainConstant.MINIMAP_VIEW_Y];
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        MapTile[][] mapViewTiles = mainController.getMapViewTiles(0, 0, MainConstant.MINIMAP_VIEW_X, MainConstant.MINIMAP_VIEW_Y);
+
         for (int i = 0; i < MainConstant.MINIMAP_VIEW_X; i++) {
             for (int j = 0; j < MainConstant.MINIMAP_VIEW_Y; j++) {
-                mainPane.getChildren().add(new MainPaneButton("", i, j, i, j));
+                // GUI的坐标系（横x纵y）和头脑里的二维数组（纵x横y）的坐标系不同
+                // TODO: 颠倒坐标系的操作逻辑需要优化，现在仅是实现，但读起代码来很难理解
+                MainPaneButton button = new MainPaneButton("", i, j, j, i,
+                        mapViewTiles[j][i].getForce(), mapViewTiles[j][i].getPlayer());
+                button.setOnAction(event -> {
+                    logger.info("[button] x:{}, y:{}, mapX:{}, mapY:{}, force:{}, player:{}",
+                            button.getX(), button.getY(),
+                            button.getMapX(), button.getMapY(),
+                            button.getForce(), button.getPlayer());
+                    // JsonUtil 好像解析不了 Button 里面涉及到的 javafx.scene.SceneAntialiasing 这个类？太多继承的字段
+//                    logger.info(JacksonUtil.toJson(event.getSource()));
+                });
+                mainPane.getChildren().add(button);
+                mainPaneButtons[i][j] = button;
             }
         }
 
@@ -59,7 +79,18 @@ public class MainViewController implements Initializable {
                     event.getX(), event.getY(),
                     event.getSceneX(), event.getSceneY(),
                     event.getScreenX(), event.getScreenY());
-            imageView.setImage(mainController.getNewMiniMap((int) event.getX(), (int) event.getY()));
+            int x = (int) event.getX();
+            int y = (int) event.getY();
+            MapTile[][] mapViewTilesOnClick = mainController.getMapViewTilesOnClick(x, y, MainConstant.MINIMAP_VIEW_X, MainConstant.MINIMAP_VIEW_Y);
+            for (int i = 0; i < mapViewTilesOnClick.length; i++) {
+                for (int j = 0; j < mapViewTilesOnClick[0].length; j++) {
+                    // TODO: 颠倒坐标系的操作逻辑需要优化，现在仅是实现，但读起代码来很难理解
+                    mainPaneButtons[i][j].setMapX(mapViewTilesOnClick[j][i].getX());
+                    mainPaneButtons[i][j].setMapY(mapViewTilesOnClick[j][i].getY());
+                    mainPaneButtons[i][j].setPlayer(mapViewTilesOnClick[j][i].getPlayer());
+                }
+            }
+            imageView.setImage(mainController.getNewMiniMap(x, y, MainConstant.MINIMAP_VIEW_X, MainConstant.MINIMAP_VIEW_Y));
         });
 
 //        GameLoopTimer timer = new GameLoopTimer() {
@@ -69,59 +100,5 @@ public class MainViewController implements Initializable {
 //            }
 //        };
 //        timer.start();
-    }
-
-    static class MainPaneButton extends Button {
-        private int x;
-        private int y;
-        private int mapX;
-        private int mapY;
-
-        public MainPaneButton(String text, int x, int y, int mapX, int mapY) {
-            super(text);
-            this.x = x;
-            this.y = y;
-            this.mapX = mapX;
-            this.mapY = mapY;
-            // TODO: 20后续可以提取成常量
-            this.setPrefHeight(20);
-            this.setPrefWidth(20);
-            AnchorPane.setTopAnchor(this, 20.0 * x);
-            AnchorPane.setLeftAnchor(this, 20.0 * y);
-            this.setStyle("-fx-border-color: #FFFFFF;-fx-border-style: solid;-fx-border-width: 1;-fx-border-radius: 2;");
-
-        }
-
-        public int getX() {
-            return x;
-        }
-
-        public void setX(int x) {
-            this.x = x;
-        }
-
-        public int getY() {
-            return y;
-        }
-
-        public void setY(int y) {
-            this.y = y;
-        }
-
-        public int getMapX() {
-            return mapX;
-        }
-
-        public void setMapX(int mapX) {
-            this.mapX = mapX;
-        }
-
-        public int getMapY() {
-            return mapY;
-        }
-
-        public void setMapY(int mapY) {
-            this.mapY = mapY;
-        }
     }
 }
