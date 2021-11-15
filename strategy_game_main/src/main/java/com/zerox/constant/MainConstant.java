@@ -9,6 +9,8 @@ package com.zerox.constant;
 public class MainConstant {
     public static final int MINIMAP_X = 200;
     public static final int MINIMAP_Y = 200;
-    public static final int MINIMAP_VIEW_X = 30;
+    public static final int MAINPANE_X = 800;
+    public static final int MAINPANE_Y = 600;
+    public static final int MINIMAP_VIEW_X = 40;
     public static final int MINIMAP_VIEW_Y = 30;
 }

@@ -32,11 +32,13 @@ public class MainPaneButton extends Button {
         this.mapY = mapY;
         this.force = force;
         this.player.setValue(player);
-        // TODO: 20后续可以提取成常量
-        this.setPrefHeight(20);
-        this.setPrefWidth(20);
-        AnchorPane.setTopAnchor(this, 20.0 * x);
-        AnchorPane.setLeftAnchor(this, 20.0 * y);
+
+        double buttonSize = 20.0;
+        this.setPrefHeight(buttonSize);
+        this.setPrefWidth(buttonSize);
+        // GUI的坐标系（横x纵y）和头脑里的二维数组（纵x横y）的坐标系不同
+        AnchorPane.setTopAnchor(this, buttonSize * y);
+        AnchorPane.setLeftAnchor(this, buttonSize * x);
         this.setStyle("-fx-border-color: #FFFFFF;-fx-border-style: solid;-fx-border-width: 1;-fx-border-radius: 2;");
 
         this.player.addListener((o, ov, nv) -> {
