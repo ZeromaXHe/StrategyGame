@@ -1,11 +1,14 @@
 package com.zerox.viewController;
 
+import com.zerox.constant.MainConstant;
 import com.zerox.controller.MainController;
-import com.zerox.engine.GameLoopTimer;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
@@ -21,6 +24,8 @@ import java.util.ResourceBundle;
  */
 @Controller("MainViewController")
 public class MainViewController implements Initializable {
+    private static final Logger logger = LoggerFactory.getLogger(MainViewController.class);
+
     // Back-end Controller
     private MainController mainController;
 
@@ -38,11 +43,24 @@ public class MainViewController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        for (int i = 0; i < 30; i++) {
-            for (int j = 0; j < 30; j++) {
+        for (int i = 0; i < MainConstant.MINIMAP_VIEW_X; i++) {
+            for (int j = 0; j < MainConstant.MINIMAP_VIEW_Y; j++) {
                 mainPane.getChildren().add(new MainPaneButton("", i, j, i, j));
             }
         }
+
+        ImageView imageView = new ImageView(mainController.getMiniMapImage());
+        mapPane.getChildren().add(imageView);
+        AnchorPane.setTopAnchor(imageView, 0.0);
+        AnchorPane.setLeftAnchor(imageView, 0.0);
+
+        imageView.setOnMouseClicked(event -> {
+            logger.info("x: {}, y: {}, sceneX: {}, sceneY: {}, screenX: {}, screenY: {}",
+                    event.getX(), event.getY(),
+                    event.getSceneX(), event.getSceneY(),
+                    event.getScreenX(), event.getScreenY());
+            imageView.setImage(mainController.getNewMiniMap((int) event.getX(), (int) event.getY()));
+        });
 
 //        GameLoopTimer timer = new GameLoopTimer() {
 //            @Override
@@ -65,11 +83,12 @@ public class MainViewController implements Initializable {
             this.y = y;
             this.mapX = mapX;
             this.mapY = mapY;
+            // TODO: 20后续可以提取成常量
             this.setPrefHeight(20);
             this.setPrefWidth(20);
             AnchorPane.setTopAnchor(this, 20.0 * x);
             AnchorPane.setLeftAnchor(this, 20.0 * y);
-            this.setStyle("-fx-background-color: #009999;-fx-border-color: #FFFFFF;-fx-border-style: solid;-fx-border-width: 1;-fx-border-radius: 2;");
+            this.setStyle("-fx-border-color: #FFFFFF;-fx-border-style: solid;-fx-border-width: 1;-fx-border-radius: 2;");
 
         }
 

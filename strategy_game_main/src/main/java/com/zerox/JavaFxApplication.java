@@ -52,6 +52,8 @@ public class JavaFxApplication extends Application {
         KeyPolling.getInstance().pollScene(scene);
 
         primaryStage.setScene(scene);
+        // 不可改变窗口大小尺寸
+        primaryStage.setResizable(false);
         primaryStage.setTitle("javaFX game");
         primaryStage.show();
         logger.info("JavaFxApplication started!");

@@ -3,6 +3,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.FlowPane?>
+<?import com.zerox.constant.MainConstant?>
 <BorderPane fx:id="gameBorderPane" prefHeight="600" prefWidth="800" xmlns="http://javafx.com/javafx/10.0.2-internal"
             style="-fx-background-color: #00EEEE"
             xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.zerox.viewController.MainViewController">
@@ -17,8 +18,13 @@
     </center>
     <right>
         <FlowPane prefWidth="150">
-            <AnchorPane fx:id="mapPane" prefWidth="200" prefHeight="200" style="-fx-background-color: #00CCCC">
-
+            <AnchorPane fx:id="mapPane" style="-fx-background-color: #00CCCC">
+                <prefWidth>
+                    <MainConstant fx:constant="MINIMAP_X"/>
+                </prefWidth>
+                <prefHeight>
+                    <MainConstant fx:constant="MINIMAP_Y"/>
+                </prefHeight>
             </AnchorPane>
             <AnchorPane fx:id="infoPane" prefWidth="200" prefHeight="400" style="-fx-background-color: #00CCFF">
 
