@@ -21,7 +21,7 @@ public class MainPaneButton extends Button {
     private int mapX;
     private int mapY;
 
-    private int force;
+    private SimpleIntegerProperty force = new SimpleIntegerProperty(0);
     private SimpleIntegerProperty player = new SimpleIntegerProperty(0);
 
     public MainPaneButton(String text, int x, int y, int mapX, int mapY, int force, int player) {
@@ -30,8 +30,8 @@ public class MainPaneButton extends Button {
         this.y = y;
         this.mapX = mapX;
         this.mapY = mapY;
-        this.force = force;
-        this.player.setValue(player);
+        this.force.set(force);
+        this.player.set(player);
 
         double buttonSize = 20.0;
         this.setPrefHeight(buttonSize);
@@ -109,11 +109,15 @@ public class MainPaneButton extends Button {
     }
 
     public int getForce() {
+        return force.get();
+    }
+
+    public SimpleIntegerProperty forceProperty() {
         return force;
     }
 
     public void setForce(int force) {
-        this.force = force;
+        this.force.set(force);
     }
 
     public int getPlayer() {

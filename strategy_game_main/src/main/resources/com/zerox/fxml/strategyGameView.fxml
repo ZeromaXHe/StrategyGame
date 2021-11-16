@@ -4,6 +4,9 @@
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.FlowPane?>
 <?import com.zerox.constant.MainConstant?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.control.TextField?>
 <BorderPane fx:id="gameBorderPane" prefWidth="1000" prefHeight="600" xmlns="http://javafx.com/javafx/10.0.2-internal"
             style="-fx-background-color: #00EEEE"
             xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.zerox.viewController.MainViewController">
@@ -32,9 +35,16 @@
                     <MainConstant fx:constant="MINIMAP_Y"/>
                 </prefHeight>
             </AnchorPane>
-            <AnchorPane fx:id="infoPane" prefWidth="200" prefHeight="400" style="-fx-background-color: #00CCFF">
-
-            </AnchorPane>
+            <GridPane fx:id="infoPane" prefWidth="200" prefHeight="400" style="-fx-background-color: #00CCFF">
+                <Label text="x:" GridPane.rowIndex="0" GridPane.columnIndex="0"/>
+                <TextField fx:id="tfMapX" editable="false" GridPane.rowIndex="0" GridPane.columnIndex="1"/>
+                <Label text="y:" GridPane.rowIndex="1" GridPane.columnIndex="0"/>
+                <TextField fx:id="tfMapY" editable="false" GridPane.rowIndex="1" GridPane.columnIndex="1"/>
+                <Label text="force:" GridPane.rowIndex="2" GridPane.columnIndex="0"/>
+                <TextField fx:id="tfForce" editable="false" GridPane.rowIndex="2" GridPane.columnIndex="1"/>
+                <Label text="player:" GridPane.rowIndex="3" GridPane.columnIndex="0"/>
+                <TextField fx:id="tfPlayer" editable="false" GridPane.rowIndex="3" GridPane.columnIndex="1"/>
+            </GridPane>
         </FlowPane>
     </right>
 </BorderPane>
