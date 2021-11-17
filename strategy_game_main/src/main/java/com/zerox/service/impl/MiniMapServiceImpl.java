@@ -31,7 +31,7 @@ public class MiniMapServiceImpl implements MiniMapService {
     }
 
     @Override
-    public Image getMiniMapImage() {
+    public Image getDefaultMiniMapImage() {
         PixelWriter pw = wi.getPixelWriter();
         paintBasicImage(pw);
         paintViewBox(pw, -1, MainConstant.MINIMAP_VIEW_X, -1, MainConstant.MINIMAP_VIEW_Y);

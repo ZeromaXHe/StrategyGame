@@ -1,5 +1,6 @@
 package com.zerox.game.view;
 
+import javafx.beans.binding.Bindings;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.geometry.Insets;
 import javafx.scene.control.Button;
@@ -41,20 +42,19 @@ public class MainPaneButton extends Button {
         AnchorPane.setLeftAnchor(this, buttonSize * x);
         this.setStyle("-fx-border-color: #FFFFFF;-fx-border-style: solid;-fx-border-width: 1;-fx-border-radius: 2;");
 
-        this.player.addListener((o, ov, nv) -> {
-            Background bg = new Background(
-                    new BackgroundFill(
-                            getColorOfPlayer((nv.intValue())),
-                            new CornerRadii(0),
-                            new Insets(0)));
-            this.setBackground(bg);
-        });
+        // 更新所属阵营颜色
+        this.backgroundProperty().bind(Bindings.createObjectBinding(
+                () -> new Background(new BackgroundFill(
+                        getColorOfPlayer((this.player.get())),
+                        new CornerRadii(0),
+                        new Insets(0))),
+                this.player));
     }
 
     public static Color getColorOfPlayer(int player) {
         switch (player) {
             case 0:
-                return Color.BLACK;
+                return Color.GREY;
             case 1:
                 return Color.CRIMSON;
             case 2:
@@ -72,7 +72,7 @@ public class MainPaneButton extends Button {
             case 8:
                 return Color.DARKGREEN;
             default:
-                return Color.GREY;
+                return Color.BLACK;
         }
     }
 

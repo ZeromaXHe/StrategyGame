@@ -7,6 +7,7 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.ImageView?>
 <BorderPane fx:id="gameBorderPane" prefWidth="1000" prefHeight="600" xmlns="http://javafx.com/javafx/10.0.2-internal"
             style="-fx-background-color: #00EEEE"
             xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.zerox.viewController.MainViewController">
@@ -34,6 +35,8 @@
                 <prefHeight>
                     <MainConstant fx:constant="MINIMAP_Y"/>
                 </prefHeight>
+                <ImageView fx:id="mapImage" AnchorPane.leftAnchor="0" AnchorPane.topAnchor="0"
+                           onMouseClicked="#handleClickOnMiniMap"/>
             </AnchorPane>
             <GridPane fx:id="infoPane" prefWidth="200" prefHeight="400" style="-fx-background-color: #00CCFF">
                 <Label text="x:" GridPane.rowIndex="0" GridPane.columnIndex="0"/>

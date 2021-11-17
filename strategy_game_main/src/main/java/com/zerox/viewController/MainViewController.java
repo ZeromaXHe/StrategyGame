@@ -14,7 +14,6 @@ import javafx.scene.control.Tooltip;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.GridPane;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,10 +44,9 @@ public class MainViewController implements Initializable {
 
     @FXML
     private AnchorPane mainPane;
+
     @FXML
-    private AnchorPane mapPane;
-    @FXML
-    private GridPane infoPane;
+    private ImageView mapImage;
 
     @FXML
     private TextField tfMapX;
@@ -67,12 +65,8 @@ public class MainViewController implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
         initMainPaneButtons();
 
-        ImageView imageView = new ImageView(mainController.getMiniMapImage());
-        mapPane.getChildren().add(imageView);
-        AnchorPane.setTopAnchor(imageView, 0.0);
-        AnchorPane.setLeftAnchor(imageView, 0.0);
-
-        imageView.setOnMouseClicked(event -> handleClickOnMiniMap(imageView, event));
+        // 不知道这种怎么设置到FXML里面
+        mapImage.setImage(mainController.getDefaultMiniMapImage());
 
         bindInfoPaneTextFields();
 
@@ -143,7 +137,8 @@ public class MainViewController implements Initializable {
         }
     }
 
-    private void handleClickOnMiniMap(ImageView imageView, MouseEvent event) {
+    @FXML
+    private void handleClickOnMiniMap(MouseEvent event) {
         logger.info("x: {}, y: {}, sceneX: {}, sceneY: {}, screenX: {}, screenY: {}",
                 event.getX(), event.getY(),
                 event.getSceneX(), event.getSceneY(),
@@ -160,6 +155,6 @@ public class MainViewController implements Initializable {
             }
         }
         // 更新小地图图片
-        imageView.setImage(mainController.getNewMiniMap(x, y, MainConstant.MINIMAP_VIEW_X, MainConstant.MINIMAP_VIEW_Y));
+        mapImage.setImage(mainController.getNewMiniMap(x, y, MainConstant.MINIMAP_VIEW_X, MainConstant.MINIMAP_VIEW_Y));
     }
 }

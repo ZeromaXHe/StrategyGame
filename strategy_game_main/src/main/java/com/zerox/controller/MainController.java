@@ -42,8 +42,8 @@ public class MainController {
         return new Result<>(testService.getAccountHolderName());
     }
 
-    public Image getMiniMapImage() {
-        return miniMapService.getMiniMapImage();
+    public Image getDefaultMiniMapImage() {
+        return miniMapService.getDefaultMiniMapImage();
     }
 
     public Image getNewMiniMap(int x, int y, int width, int height) {

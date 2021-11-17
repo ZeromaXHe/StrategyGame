@@ -10,7 +10,7 @@ import javafx.scene.image.Image;
  * @ModifiedBy: zhuxi
  */
 public interface MiniMapService {
-    Image getMiniMapImage();
+    Image getDefaultMiniMapImage();
 
     Image getNewMiniMap(int x, int y, int width, int height);
 
