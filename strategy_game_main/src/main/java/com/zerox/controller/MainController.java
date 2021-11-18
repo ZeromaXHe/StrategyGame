@@ -1,9 +1,6 @@
 package com.zerox.controller;
 
 import com.zerox.game.model.MapTile;
-import com.zerox.service.MainService;
-import com.zerox.entity.Result;
-import com.zerox.exception.annotation.ExceptionHandled;
 import com.zerox.service.MapService;
 import com.zerox.service.MiniMapService;
 import javafx.scene.image.Image;
@@ -18,14 +15,8 @@ import org.springframework.stereotype.Controller;
  */
 @Controller("MainController")
 public class MainController {
-    private MainService testService;
     private MiniMapService miniMapService;
     private MapService mapService;
-
-    @Autowired
-    public void setTestService(MainService testService) {
-        this.testService = testService;
-    }
 
     @Autowired
     public void setMiniMapService(MiniMapService miniMapService) {
@@ -35,11 +26,6 @@ public class MainController {
     @Autowired
     public void setMapService(MapService mapService) {
         this.mapService = mapService;
-    }
-
-    @ExceptionHandled
-    public Result<String> getAccountHolderName() {
-        return new Result<>(testService.getAccountHolderName());
     }
 
     public Image getDefaultMiniMapImage() {

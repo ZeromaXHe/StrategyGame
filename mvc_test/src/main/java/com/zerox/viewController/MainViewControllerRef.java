@@ -5,8 +5,10 @@ import com.zerox.engine.Entity;
 import com.zerox.engine.GameLoopTimer;
 import com.zerox.engine.KeyPolling;
 import com.zerox.engine.Renderer;
+import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.canvas.Canvas;
+import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.PixelWriter;
 import javafx.scene.image.WritableImage;
@@ -37,8 +39,13 @@ public class MainViewControllerRef implements Initializable {
         this.mainController = mainController;
     }
 
-    public Canvas gameCanvas;
-    public AnchorPane gameAnchor;
+    @FXML
+    private Canvas gameCanvas;
+    @FXML
+    private AnchorPane gameAnchor;
+    @FXML
+    private TextField tf;
+
     private KeyPolling keys = KeyPolling.getInstance();
 
     private Entity player = new Entity(buildPlayer());
@@ -75,6 +82,9 @@ public class MainViewControllerRef implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
 
         initialiseCanvas();
+
+        String body = mainController.getAccountHolderName().getBody();
+        tf.setText(body == null ? "null" : body);
 
         player.setDrawPosition(350, 200);
         player.setScale(0.5f);
