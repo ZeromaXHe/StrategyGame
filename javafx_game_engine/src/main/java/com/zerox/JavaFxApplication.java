@@ -26,10 +26,22 @@ import java.net.URL;
 public class JavaFxApplication extends Application {
     private static final Logger logger = LoggerFactory.getLogger(JavaFxApplication.class);
 
+    private static String fxml;
+    private static Class<?> clazz;
+
     private ConfigurableApplicationContext springContext;
 
-    public static void main(String[] args) {
+    public void gameStart(String[] args) {
+        logger.info("gameStart()");
         launch(JavaFxApplication.class, args);
+    }
+
+    public JavaFxApplication() {
+    }
+
+    public JavaFxApplication(String fxml, Class<?> clazz) {
+        JavaFxApplication.fxml = fxml;
+        JavaFxApplication.clazz = clazz;
     }
 
     @Override
@@ -42,9 +54,9 @@ public class JavaFxApplication extends Application {
     public void start(Stage primaryStage) throws Exception {
         // path 不以’/'开头时，默认是从此类所在的包下取资源；
         // path 以’/'开头时，则是从 ClassPath 根下获取
-//        URL resource = getClass().getResource("/com/zerox/fxml/strategyGameView.fxml");
-        URL resource = getClass().getResource("fxml/strategyGameView.fxml");
-        FXMLLoader loader = new FXMLLoader(resource);
+//        URL fxmlUrl = clazz.getResource("/com/zerox/" + fxml);
+        URL fxmlUrl = clazz.getResource(fxml);
+        FXMLLoader loader = new FXMLLoader(fxmlUrl);
         loader.setControllerFactory(springContext::getBean);
         Parent root = loader.load();
 
