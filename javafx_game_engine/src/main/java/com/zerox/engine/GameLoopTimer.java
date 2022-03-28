@@ -78,12 +78,16 @@ public abstract class GameLoopTimer extends AnimationTimer {
             animationStart += (now - pauseStart);
             isPaused = false;
             playScheduled = false;
+            // 不加这一行，每次开始的第一帧 secondsSinceLastFrame 会等于当前时间戳毫秒数
+            lastFrameTimeNanos = now;
         }
 
         if (restartScheduled) {
             isPaused = false;
             animationStart = now;
             restartScheduled = false;
+            // 不加这一行，每次暂停后恢复的第一帧 secondsSinceLastFrame 会等于（当前时间戳毫秒数 - 暂停的时间戳毫秒数）
+            lastFrameTimeNanos = now;
         }
 
         if (!isPaused) {

@@ -42,11 +42,7 @@ public class MainController implements Initializable {
         GameLoopTimer timer = new GameLoopTimer() {
             @Override
             public void tick(float secondsSinceLastFrame) {
-                if (secondsSinceLastFrame < 0.1) {
-                    // secondsSinceLastFrame 在暂停后那一帧会是和暂停前的时间差，第一次开始时也会是现在的时间戳
-                    // 所以只使用小于0.1的值
-                    value.set(value.get() + secondsSinceLastFrame / 10);
-                }
+                value.set(value.get() + secondsSinceLastFrame / 10);
                 if (value.get() > 1) {
                     logger.info("progress complete! before value:{}", value.getValue());
                     value.set(value.get() % 1);
