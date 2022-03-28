@@ -8,5 +8,6 @@
             xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.zerox.viewController.MainViewControllerRef">
     <Canvas fx:id="gameCanvas" height="450.0" width="750.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0"
             AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0"/>
-    <TextField fx:id="tf" AnchorPane.topAnchor="0" AnchorPane.leftAnchor="0"/>
+    <!-- tf 不能获取焦点，否则方向键无法正常控制画布上的玩家角色 -->
+    <TextField fx:id="tf" AnchorPane.topAnchor="0" AnchorPane.leftAnchor="0" editable="false" focusTraversable="false"/>
 </AnchorPane>
