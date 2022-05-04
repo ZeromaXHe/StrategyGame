@@ -1,10 +1,38 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<?import javafx.scene.layout.*?>
 
-<?import javafx.scene.control.ProgressBar?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ProgressBar?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
 <AnchorPane fx:id="gameAnchor" prefHeight="600" prefWidth="800" xmlns="http://javafx.com/javafx/10.0.2-internal"
             xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.zerox.controller.MainController">
-    <ProgressBar AnchorPane.topAnchor="100" AnchorPane.leftAnchor="100" fx:id="progressBar"/>
-    <Button AnchorPane.topAnchor="150" AnchorPane.leftAnchor="100" fx:id="button" text="button" onAction="#onButtonClick"/>
+    <VBox AnchorPane.topAnchor="10" AnchorPane.leftAnchor="10" alignment="CENTER" prefWidth="190">
+        <ProgressBar AnchorPane.topAnchor="0" AnchorPane.leftAnchor="0" prefWidth="190" fx:id="myHpBar"/>
+        <Label text="1000/1000 HP" fx:id="myHpLabel"/>
+
+        <Button AnchorPane.topAnchor="200" AnchorPane.leftAnchor="0" text="(9,999)Food +100 HP"
+                fx:id="foodButton" onAction="#onFoodButtonClick"/>
+        <CheckBox AnchorPane.topAnchor="300" AnchorPane.leftAnchor="0"
+                  text="Automatically swap food when it runs out?" fx:id="autoSwapFood"/>
+    </VBox>
+    <VBox AnchorPane.topAnchor="10" AnchorPane.leftAnchor="210" prefWidth="190" alignment="CENTER">
+        <ProgressBar AnchorPane.topAnchor="0" AnchorPane.leftAnchor="0" prefWidth="190" fx:id="myAttackIntervalBar"/>
+        <Label text="Attack Interval: 4.00 s" fx:id="myAttackIntervalLabel"/>
+    </VBox>
+    <VBox AnchorPane.topAnchor="10" AnchorPane.leftAnchor="410" prefWidth="400">
+        <HBox spacing="10">
+            <VBox alignment="CENTER">
+                <ProgressBar prefWidth="190" fx:id="enemyHpBar"/>
+                <Label text="100/100 HP" fx:id="enemyHpLabel"/>
+            </VBox>
+            <VBox alignment="CENTER">
+                <ProgressBar prefWidth="190" fx:id="enemyAttackIntervalBar"/>
+                <Label text="Attack Interval: -" fx:id="enemyAttackIntervalLabel"/>
+            </VBox>
+        </HBox>
+        <Button text="pause/continue fight" fx:id="pauseButton" onAction="#onPauseButtonClick"/>
+    </VBox>
 </AnchorPane>
